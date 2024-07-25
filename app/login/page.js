@@ -1,0 +1,77 @@
+"use client";
+import React, { useState } from "react";
+import axiosInstance from "@/utils/axiosInstance";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+
+const page = () => {
+  const router = useRouter();
+  const [userObj, setUserObj] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axiosInstance.post("/api/auth/login", userObj);
+      if (res.status === 200) {
+        Cookies.set("token", res.data?.data?.token);
+        router.push("/chat");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleChange = (e) => {
+    setUserObj({ ...userObj, [e.target.id]: e.target.value });
+  };
+  return (
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h3 className="card-title text-center mb-4">Login</h3>
+              <form onSubmit={handleLogin}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    value={userObj.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    value={userObj.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="d-grid">
+                  <button type="submit" className="btn btn-primary">
+                    Login
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default page;
