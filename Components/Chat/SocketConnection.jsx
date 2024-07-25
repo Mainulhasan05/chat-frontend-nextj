@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import CreateRoomModal from "./CreateRoomModal";
 
 const token = "your_jwt_secret_key";
 const socket2 = io(process.env.API_URL, {
@@ -52,9 +53,9 @@ const SocketConnection = () => {
     router.push("/login");
   };
   return (
-    <div className="d-flex gap-5 justify-content-between w-100">
-      <div>
-        <h3>Rifat's chat</h3>
+    <div>
+      <div className="d-flex gap-5 justify-content-between w-100">
+        <h5s>Rifat's chat</h5s>
         <span
           className={`my-2 fw-bold ${
             connected ? "text-success" : "text-danger"
@@ -69,6 +70,10 @@ const SocketConnection = () => {
         </button>
       </div>
       <br />
+      <button data-bs-toggle="modal" data-bs-target="#createRoomModal">
+        Create Room
+      </button>
+      <CreateRoomModal />
     </div>
   );
 };
