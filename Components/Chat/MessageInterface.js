@@ -29,7 +29,7 @@ const MessageInterface = () => {
       loadMessages();
       document.getElementById("audio").play();
     });
-    loadMessages();
+    // loadMessages();
   }, []);
   const handleChange = (e) => {
     setMessage(e.target.value);
@@ -54,7 +54,7 @@ const MessageInterface = () => {
         setMessage("");
       }
       socket.emit("new_message");
-      loadMessages();
+      // loadMessages();
     } catch (error) {}
   };
   const loadMessages = async (limit = 40) => {

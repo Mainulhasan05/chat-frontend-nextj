@@ -21,9 +21,9 @@ const HomeButtons = () => {
             <Link href="/login" className="btn btn-primary">
               Login
             </Link>
-            <Link href="/register" className="btn btn-primary">
+            {/* <Link href="/register" className="btn btn-primary">
               Register
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

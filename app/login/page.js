@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 const page = () => {
   const router = useRouter();
   const [userObj, setUserObj] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -16,7 +16,9 @@ const page = () => {
     try {
       const res = await axiosInstance.post("/api/auth/login", userObj);
       if (res.status === 200) {
-        Cookies.set("token", res.data?.data?.token);
+        Cookies.set("token", res.data?.data?.token, {
+          expires: 30,
+        });
         router.push("/chat");
       }
     } catch (error) {
@@ -35,14 +37,14 @@ const page = () => {
               <h3 className="card-title text-center mb-4">Login</h3>
               <form onSubmit={handleLogin}>
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    Email address
+                  <label htmlFor="username" className="form-label">
+                    Username
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     className="form-control"
-                    id="email"
-                    value={userObj.email}
+                    id="username"
+                    value={userObj.username}
                     onChange={handleChange}
                     required
                   />

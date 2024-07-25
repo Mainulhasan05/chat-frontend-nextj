@@ -6,6 +6,16 @@ let socket;
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
+  const [roomObj, setRoomObj] = useState({
+    name: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    setRoomObj({
+      ...roomObj,
+      [e.target.name]: e.target.value,
+    });
+  };
   useEffect(() => {
     socket = socketIo(process.env.API_URL, { transports: ["websocket"] });
     socket.on("connection", (data) => {
@@ -15,7 +25,7 @@ const UserList = () => {
   }, []);
   const loadUsers = async () => {
     try {
-      const res = await axiosInstance.get("/api/users");
+      const res = await axiosInstance.get("/api/auth/chat-rooms");
       setUsers(res.data?.data);
     } catch (error) {}
   };
