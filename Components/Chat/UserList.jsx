@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import socketIo from "socket.io-client";
+import Link from "next/link";
 let socket;
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -33,17 +34,14 @@ const UserList = () => {
     <div>
       <h4>User List: {users?.length}</h4>
       <hr />
-      <div style={{ overflow: "scroll", height: "200px" }}>
+      <div style={{ overflow: "scroll", height: "80vh" }}>
         {users.map((data, index) => {
           return (
-            <div key={index} className="studentList mx-4">
+            <div key={index} className="chartrooms mx-4">
               <div>
-                <h6>
-                  {data.email} - {data?.id}
-                  {activeUsers.includes(data?.id) && (
-                    <span className="badge bg-success">Active</span>
-                  )}
-                </h6>
+                <Link href={`/chat/${data.id}`}>
+                  <h6>{data.name}</h6>
+                </Link>
                 <hr />
               </div>
             </div>

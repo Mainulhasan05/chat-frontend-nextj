@@ -62,13 +62,9 @@ export const ChatAppProvider = ({ children }) => {
 
   const createRoom = async ({ name, password }) => {
     try {
-      const res = await fetch("/api/chat-room/join", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ name, password }),
+      const res = await axiosInstance.post("/api/chat-room/join", {
+        name,
+        password,
       });
 
       const data = await res.json();

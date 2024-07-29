@@ -43,9 +43,6 @@ const MessageInterface = () => {
         alert("please write something");
         return;
       }
-      // const formData = new FormData();
-      // formData.append("content", message);
-      // formData.append("image", files);
       const res = await axiosInstance.post("/api/chat/send", {
         content: message,
       });

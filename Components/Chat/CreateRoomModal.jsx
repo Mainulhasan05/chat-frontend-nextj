@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useChatApp } from "@/context/ChatAppContext";
 
 const CreateRoomModal = () => {
-  const { createRoom } = useChatApp();
+  const { createRoom, fetchRooms } = useChatApp();
   // createRoom
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +14,7 @@ const CreateRoomModal = () => {
     try {
       const res = await createRoom({ name, password });
       console.log(res);
+      fetchRooms();
       setMessage({ type: "success", text: "Room created successfully!" });
       setName("");
       setPassword("");
