@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useChatApp } from "@/context/ChatAppContext";
 
 const page = () => {
   const router = useRouter();
+  const { fetchRooms } = useChatApp();
   const [userObj, setUserObj] = useState({
     username: "",
     password: "",
@@ -19,6 +21,7 @@ const page = () => {
         Cookies.set("token", res.data?.data?.token, {
           expires: 30,
         });
+        fetchRooms();
         router.push("/chat");
       }
     } catch (error) {
