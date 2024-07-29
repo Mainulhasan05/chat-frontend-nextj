@@ -9,7 +9,7 @@ let socket;
 let timer;
 
 const MessageInterface = () => {
-  const { selectedRoomId } = useChatApp();
+  const { selectedRoomId, handleSetSelectedRoomId } = useChatApp();
   const [messages, setMessages] = useState([]);
   const [files, setFiles] = useState(null);
   const [message, setMessage] = useState("");
@@ -110,7 +110,15 @@ const MessageInterface = () => {
   return (
     <div className="w-100">
       <h4 className="bg-success p-2 text-white">
-        Messages {messages?.length} - user {user?.id}
+        <span
+          onClick={() => {
+            handleSetSelectedRoomId(null);
+          }}
+          className="btn btn-warning btn-sm"
+        >
+          Back
+        </span>{" "}
+        - {user?.username}
       </h4>
       <div className="message-container p-3 d-flex flex-column-reverse">
         {messages?.map((data, index) => (

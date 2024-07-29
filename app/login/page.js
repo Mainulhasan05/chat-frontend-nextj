@@ -21,8 +21,8 @@ const page = () => {
         Cookies.set("token", res.data?.data?.token, {
           expires: 30,
         });
-        fetchRooms();
         router.push("/chat");
+        fetchRooms();
       }
     } catch (error) {
       console.log(error);

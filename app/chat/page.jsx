@@ -15,7 +15,7 @@ const page = () => {
         <div className="row justify-content-center">
           <div className="col-md-3">
             <SocketConnection />
-            <UserList />
+            {selectedRoomId == null && <UserList />}
           </div>
           <div className="col-md-9 my-4">
             {selectedRoomId ? (
