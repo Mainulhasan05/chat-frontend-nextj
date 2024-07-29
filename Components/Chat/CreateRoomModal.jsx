@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useChatApp } from "@/context/ChatAppContext";
 
 const CreateRoomModal = () => {
   const { createRoom, fetchRooms } = useChatApp();
-  // createRoom
+  const closeModalRef = useRef(null);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
@@ -14,12 +14,23 @@ const CreateRoomModal = () => {
     try {
       const res = await createRoom({ name, password });
       console.log(res);
+      if (res.status === 201) {
+        setMessage({ type: "success", text: "Room created successfully!" });
+      }
+      if (res.status === 200) {
+        setMessage({ type: "success", text: res.data.message });
+      }
       fetchRooms();
-      setMessage({ type: "success", text: "Room created successfully!" });
       setName("");
       setPassword("");
+      if (closeModalRef.current) {
+        setTimeout(() => {
+          closeModalRef.current.click();
+          setMessage(null);
+        }, 1000);
+      }
     } catch (error) {
-      setMessage({ type: "danger", text: error.message });
+      setMessage({ type: "danger", text: error?.response?.data?.message });
     }
   };
 
@@ -39,6 +50,7 @@ const CreateRoomModal = () => {
                 Create Chat Room
               </h1>
               <button
+                ref={closeModalRef}
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
@@ -63,7 +75,8 @@ const CreateRoomModal = () => {
                     placeholder="Enter room name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    required
+                    autoComplete="off"
+                    required={true}
                   />
                 </div>
                 <div className="mb-3">
@@ -71,12 +84,13 @@ const CreateRoomModal = () => {
                     Password (Optional)
                   </label>
                   <input
-                    type="password"
+                    type="text"
                     className="form-control"
                     id="roomPassword"
                     placeholder="Enter room password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="off"
                   />
                 </div>
                 <button type="submit" className="btn btn-primary">

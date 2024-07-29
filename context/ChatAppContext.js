@@ -66,23 +66,11 @@ export const ChatAppProvider = ({ children }) => {
   };
 
   const createRoom = async ({ name, password }) => {
-    try {
-      const res = await axiosInstance.post("/api/chat-room/join", {
-        name,
-        password,
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setChatRooms((prevRooms) => [...prevRooms, data]);
-        setMessage({ type: "success", text: "Room created successfully!" });
-      } else {
-        throw new Error(data.error);
-      }
-    } catch (error) {
-      setMessage({ type: "danger", text: error.message });
-    }
+    const res = await axiosInstance.post("/api/chat-room/join", {
+      name,
+      password,
+    });
+    return res;
   };
 
   const joinRoom = async ({ name, password }) => {

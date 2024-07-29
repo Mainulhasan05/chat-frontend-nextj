@@ -10,6 +10,7 @@ let timer;
 
 const MessageInterface = () => {
   const { selectedRoomId, handleSetSelectedRoomId } = useChatApp();
+  const { loading, setLoading } = useState(false);
   const [messages, setMessages] = useState([]);
   const [files, setFiles] = useState(null);
   const [message, setMessage] = useState("");
@@ -66,21 +67,27 @@ const MessageInterface = () => {
         alert("please write something");
         return;
       }
-      const res = await axiosInstance.post("/api/chat/send", {
-        content: message,
-        chatRoomId: selectedRoomId,
-      });
-
-      if (res.status === 200) {
-        socket.emit("new_message", {
-          token: Cookies.get("token"),
-          roomId: selectedRoomId,
-          message: message,
+      if (!loading) {
+        setLoading(true);
+        const res = await axiosInstance.post("/api/chat/send", {
+          content: message,
+          chatRoomId: selectedRoomId,
         });
-        setMessage("");
-        loadMessages();
+
+        if (res.status === 200) {
+          setMessage("");
+          socket.emit("new_message", {
+            token: Cookies.get("token"),
+            roomId: selectedRoomId,
+            message: message,
+          });
+
+          loadMessages();
+        }
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log("Error:", error);
     }
   };
@@ -139,7 +146,7 @@ const MessageInterface = () => {
           </div>
         ))}
         <div className="text-center">
-          {messages?.length > 40 && (
+          {messages?.length > 39 && (
             <button onClick={loadMore} className="btn btn-primary">
               Load More
             </button>

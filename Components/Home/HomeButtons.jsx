@@ -13,8 +13,8 @@ const HomeButtons = () => {
     }
   }, []);
   return (
-    <>
-      <div className="card">
+    <div className="container my-4" style={{ maxWidth: "750px" }}>
+      <div className="card ">
         <div className="card-body">
           <h3 className="card-title text-center mb-4">Welcome</h3>
           <div className="d-grid gap-2">
@@ -27,7 +27,7 @@ const HomeButtons = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
