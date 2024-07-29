@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useChatApp } from "@/context/ChatAppContext";
 let socket;
 const UserList = () => {
-  const { selectedRoomId, handleSetSelectedRoomId } = useChatApp();
+  const { selectedRoomId, chatRooms, handleSetSelectedRoomId } = useChatApp();
   const router = useRouter();
   const [users, setUsers] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
@@ -26,20 +26,13 @@ const UserList = () => {
     socket.on("connection", (data) => {
       setActiveUsers(data);
     });
-    loadUsers();
   }, []);
-  const loadUsers = async () => {
-    try {
-      const res = await axiosInstance.get("/api/auth/chat-rooms");
-      setUsers(res.data?.data);
-    } catch (error) {}
-  };
+
   return (
     <div>
-      <h4>User List: {users?.length}</h4>
       <hr />
       <div style={{ overflow: "scroll", height: "80vh" }}>
-        {users.map((data, index) => {
+        {chatRooms.map((data, index) => {
           return (
             <div key={index} className="chartrooms mx-4">
               <div style={{ cursor: "pointer" }}>

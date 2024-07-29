@@ -55,14 +55,14 @@ const SocketConnection = () => {
   return (
     <div>
       <div className="d-flex gap-5 justify-content-between w-100">
-        <h5s>Rifat's chat</h5s>
-        <span
+        <h5>Anonymous chat</h5>
+        {/* <span
           className={`my-2 fw-bold ${
             connected ? "text-success" : "text-danger"
           }`}
         >
           {connected ? "Connected" : "Disconnected"}
-        </span>
+        </span> */}
       </div>
       <div>
         <button onClick={handleLogout} className="btn btn-danger">
@@ -70,8 +70,12 @@ const SocketConnection = () => {
         </button>
       </div>
       <br />
-      <button data-bs-toggle="modal" data-bs-target="#createRoomModal">
-        Create Room
+      <button
+        className="btn border"
+        data-bs-toggle="modal"
+        data-bs-target="#createRoomModal"
+      >
+        Create/Join Room +
       </button>
       <CreateRoomModal />
     </div>

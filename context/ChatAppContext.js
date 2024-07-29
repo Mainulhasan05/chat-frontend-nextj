@@ -29,7 +29,7 @@ export const ChatAppProvider = ({ children }) => {
   const fetchRooms = async (token) => {
     try {
       const res = await axiosInstance.get("/api/auth/chat-rooms");
-      console.log(res.data);
+      setChatRooms(res.data?.data);
     } catch (error) {
       console.log(error.message);
     }
