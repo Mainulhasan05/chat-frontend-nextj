@@ -3,8 +3,12 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import socketIo from "socket.io-client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useChatApp } from "@/context/ChatAppContext";
 let socket;
 const UserList = () => {
+  const { selectedRoomId, handleSetSelectedRoomId } = useChatApp();
+  const router = useRouter();
   const [users, setUsers] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
   const [roomObj, setRoomObj] = useState({
@@ -38,10 +42,17 @@ const UserList = () => {
         {users.map((data, index) => {
           return (
             <div key={index} className="chartrooms mx-4">
-              <div>
-                <Link href={`/chat/${data.id}`}>
+              <div style={{ cursor: "pointer" }}>
+                <span
+                  className={`${
+                    selectedRoomId == data.id ? "active text-success" : ""
+                  }`}
+                  onClick={() => {
+                    handleSetSelectedRoomId(data.id);
+                  }}
+                >
                   <h6>{data.name}</h6>
-                </Link>
+                </span>
                 <hr />
               </div>
             </div>

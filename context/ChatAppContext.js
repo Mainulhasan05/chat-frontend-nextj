@@ -10,6 +10,7 @@ export const useChatApp = () => {
 
 export const ChatAppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState(null);
@@ -20,6 +21,10 @@ export const ChatAppProvider = ({ children }) => {
       fetchRooms();
     }
   }, []);
+
+  const handleSetSelectedRoomId = (id) => {
+    setSelectedRoomId(id);
+  };
 
   const fetchRooms = async (token) => {
     try {
@@ -111,11 +116,13 @@ export const ChatAppProvider = ({ children }) => {
         chatRooms,
         messages,
         message,
+        selectedRoomId,
         fetchRooms,
         login,
         logout,
         createRoom,
         joinRoom,
+        handleSetSelectedRoomId,
       }}
     >
       {children}

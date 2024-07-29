@@ -1,10 +1,14 @@
+"use client";
 import React from "react";
 
 import UserList from "@/Components/Chat/UserList";
 import MessageInterface from "@/Components/Chat/MessageInterface";
 import SocketConnection from "@/Components/Chat/SocketConnection";
+import { useChatApp } from "@/context/ChatAppContext";
 
 const page = () => {
+  const { selectedRoomId, fetchRooms } = useChatApp();
+
   return (
     <>
       <div className="w-100 ">
@@ -14,7 +18,13 @@ const page = () => {
             <UserList />
           </div>
           <div className="col-md-9 my-4">
-            <MessageInterface />
+            {selectedRoomId ? (
+              <MessageInterface />
+            ) : (
+              <div className="alert alert-info">
+                Please select a room to start chatting
+              </div>
+            )}
           </div>
         </div>
       </div>
