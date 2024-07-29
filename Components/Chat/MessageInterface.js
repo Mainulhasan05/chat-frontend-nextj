@@ -22,6 +22,7 @@ const MessageInterface = () => {
 
     socket.on("new_message", (data) => {
       loadMessages();
+      document.getElementById("audio").play();
     });
     socket.on("typing", (data) => {
       setStatus(data);
