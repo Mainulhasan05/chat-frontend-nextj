@@ -4,6 +4,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useChatApp } from "@/context/ChatAppContext";
+import Link from "next/link";
 
 const page = () => {
   const router = useRouter();
@@ -29,6 +30,7 @@ const page = () => {
       }
     } catch (error) {
       setLoading(false);
+      alert(error.response.data.error);
       console.log(error);
     }
   };
@@ -81,6 +83,14 @@ const page = () => {
                   }
                 </div>
               </form>
+              <div className="text-center my-2 p-2">
+                <small>
+                  {/* Don't have an account?{" "} */}
+                  <Link href="/" className="text-primary">
+                    Back to home
+                  </Link>
+                </small>
+              </div>
             </div>
           </div>
         </div>
