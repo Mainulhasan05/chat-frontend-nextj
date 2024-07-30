@@ -7,7 +7,12 @@ import { useRouter } from "next/navigation";
 import { useChatApp } from "@/context/ChatAppContext";
 let socket;
 const UserList = () => {
-  const { selectedRoomId, chatRooms, handleSetSelectedRoomId } = useChatApp();
+  const {
+    selectedRoomId,
+    chatRooms,
+    handleSetSelectedRoomId,
+    setSelectedRoom,
+  } = useChatApp();
   const router = useRouter();
   const [users, setUsers] = useState([]);
   const [activeUsers, setActiveUsers] = useState([]);
@@ -42,6 +47,7 @@ const UserList = () => {
                   }`}
                   onClick={() => {
                     handleSetSelectedRoomId(data.id);
+                    setSelectedRoom(data);
                   }}
                 >
                   <h6>{data.name}</h6>

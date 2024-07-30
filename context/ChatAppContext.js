@@ -11,6 +11,7 @@ export const useChatApp = () => {
 export const ChatAppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState(null);
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState(null);
@@ -105,6 +106,8 @@ export const ChatAppProvider = ({ children }) => {
         messages,
         message,
         selectedRoomId,
+        selectedRoom,
+        setSelectedRoom,
         fetchRooms,
         login,
         logout,

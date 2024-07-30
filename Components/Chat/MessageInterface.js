@@ -2,28 +2,37 @@
 import { useChatApp } from "@/context/ChatAppContext";
 import axiosInstance from "@/utils/axiosInstance";
 import Cookies from "js-cookie";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import socketIo from "socket.io-client";
 
 let socket;
 let timer;
 
 const MessageInterface = () => {
-  const { selectedRoomId, handleSetSelectedRoomId } = useChatApp();
-  const { loading, setLoading } = useState(false);
+  const { selectedRoomId, handleSetSelectedRoomId, selectedRoom } =
+    useChatApp();
+  const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [files, setFiles] = useState(null);
   const [message, setMessage] = useState("");
   const [user, setUser] = useState();
   const [status, setStatus] = useState("no one");
   const [page, setPage] = useState(1);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
     socket = socketIo(process.env.API_URL, { transports: ["websocket"] });
 
     socket.on("new_message", (data) => {
-      loadMessages();
+      setMessages((prevMessages) => [data, ...prevMessages]);
       document.getElementById("audio").play();
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        loadMessages();
+      }, 5000);
     });
     socket.on("typing", (data) => {
       setStatus(data);
@@ -79,10 +88,11 @@ const MessageInterface = () => {
           socket.emit("new_message", {
             token: Cookies.get("token"),
             roomId: selectedRoomId,
-            message: message,
+            content: message,
+            username: user?.username,
+            userId: user?.id,
+            createdAt: new Date().toLocaleDateString(),
           });
-
-          loadMessages();
         }
       }
       setLoading(false);
@@ -125,7 +135,7 @@ const MessageInterface = () => {
         >
           Back
         </span>{" "}
-        - {user?.username}
+        {selectedRoom?.name} -{/* - {user?.username} */}
       </h4>
       <div className="message-container p-3 d-flex flex-column-reverse">
         {messages?.map((data, index) => (
