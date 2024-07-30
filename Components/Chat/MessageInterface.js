@@ -135,7 +135,7 @@ const MessageInterface = () => {
         >
           Back
         </span>{" "}
-        {selectedRoom?.name} -{/* - {user?.username} */}
+        {selectedRoom?.name} - - {user?.username}
       </h4>
       <div className="message-container p-3 d-flex flex-column-reverse">
         {messages?.map((data, index) => (
