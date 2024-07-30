@@ -86,13 +86,13 @@ const MessageInterface = () => {
           userId: user?.id,
           createdAt: new Date(),
         });
+        setMessage("");
         const res = await axiosInstance.post("/api/chat/send", {
           content: message,
           chatRoomId: selectedRoomId,
         });
 
         if (res.status === 200) {
-          setMessage("");
         }
       }
       setLoading(false);
