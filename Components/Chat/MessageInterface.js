@@ -78,6 +78,14 @@ const MessageInterface = () => {
       }
       if (!loading) {
         setLoading(true);
+        socket.emit("new_message", {
+          token: Cookies.get("token"),
+          roomId: selectedRoomId,
+          content: message,
+          username: user?.username,
+          userId: user?.id,
+          createdAt: new Date(),
+        });
         const res = await axiosInstance.post("/api/chat/send", {
           content: message,
           chatRoomId: selectedRoomId,
@@ -85,14 +93,6 @@ const MessageInterface = () => {
 
         if (res.status === 200) {
           setMessage("");
-          socket.emit("new_message", {
-            token: Cookies.get("token"),
-            roomId: selectedRoomId,
-            content: message,
-            username: user?.username,
-            userId: user?.id,
-            createdAt: new Date().toLocaleDateString(),
-          });
         }
       }
       setLoading(false);
