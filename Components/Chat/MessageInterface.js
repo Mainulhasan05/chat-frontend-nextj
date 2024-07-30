@@ -80,6 +80,7 @@ const MessageInterface = () => {
       }
       if (!loading) {
         setLoading(true);
+        setMessage("");
         socket.emit("new_message", {
           token: Cookies.get("token"),
           roomId: selectedRoomId,
@@ -88,7 +89,7 @@ const MessageInterface = () => {
           userId: user?.id,
           createdAt: new Date(),
         });
-        setMessage("");
+
         const res = await axiosInstance.post("/api/chat/send", {
           content: message,
           chatRoomId: selectedRoomId,
