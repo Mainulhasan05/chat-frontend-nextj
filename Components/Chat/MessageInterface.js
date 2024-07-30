@@ -22,11 +22,17 @@ const MessageInterface = () => {
 
   useEffect(() => {
     socket = socketIo(process.env.API_URL, { transports: ["websocket"] });
-
+    requestNotificationPermission();
     socket.on("new_message", (data) => {
       setMessages((prevMessages) => [data, ...prevMessages]);
       document.getElementById("audio").play();
 
+      if (Notification.permission === "granted") {
+        new Notification("New message", {
+          body: data.content, // Adjust as needed
+          icon: "/path/to/icon.png", // Optional
+        });
+      }
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -49,6 +55,11 @@ const MessageInterface = () => {
 
     return () => {};
   }, []);
+  const requestNotificationPermission = () => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  };
 
   useEffect(() => {
     if (selectedRoomId) {
@@ -65,9 +76,7 @@ const MessageInterface = () => {
     setMessage(e.target.value);
     socket.emit("typing", {
       token: Cookies.get("token"),
-      User: {
-        username: user?.username,
-      },
+      username: user?.username,
       roomId: selectedRoomId,
     });
   };
@@ -80,22 +89,27 @@ const MessageInterface = () => {
       }
       if (!loading) {
         setLoading(true);
+        let temp = message;
         setMessage("");
         socket.emit("new_message", {
           token: Cookies.get("token"),
           roomId: selectedRoomId,
           content: message,
           username: user?.username,
+          User: {
+            username: user?.username,
+          },
           userId: user?.id,
           createdAt: new Date(),
         });
-
         const res = await axiosInstance.post("/api/chat/send", {
           content: message,
           chatRoomId: selectedRoomId,
         });
 
         if (res.status === 200) {
+        } else {
+          setMessage(temp);
         }
       }
       setLoading(false);
