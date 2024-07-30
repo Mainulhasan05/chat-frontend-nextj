@@ -65,7 +65,9 @@ const MessageInterface = () => {
     setMessage(e.target.value);
     socket.emit("typing", {
       token: Cookies.get("token"),
-      username: user?.username,
+      User: {
+        username: user?.username,
+      },
       roomId: selectedRoomId,
     });
   };
