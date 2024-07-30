@@ -32,7 +32,7 @@ const MessageInterface = () => {
       }
       timeoutRef.current = setTimeout(() => {
         loadMessages();
-      }, 5000);
+      }, 10000);
     });
     socket.on("typing", (data) => {
       setStatus(data);
