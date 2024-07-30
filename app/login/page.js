@@ -8,6 +8,7 @@ import { useChatApp } from "@/context/ChatAppContext";
 const page = () => {
   const router = useRouter();
   const { fetchRooms } = useChatApp();
+  const [loading, setLoading] = useState(false);
   const [userObj, setUserObj] = useState({
     username: "",
     password: "",
@@ -16,15 +17,18 @@ const page = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const res = await axiosInstance.post("/api/auth/login", userObj);
       if (res.status === 200) {
         Cookies.set("token", res.data?.data?.token, {
           expires: 30,
         });
         router.push("/chat");
+        setLoading(false);
         fetchRooms();
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -66,9 +70,15 @@ const page = () => {
                   />
                 </div>
                 <div className="d-grid">
-                  <button type="submit" className="btn btn-primary">
-                    Login
-                  </button>
+                  {
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={loading}
+                    >
+                      {loading ? "Logging in..." : "Login"}
+                    </button>
+                  }
                 </div>
               </form>
             </div>
