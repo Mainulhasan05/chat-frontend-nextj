@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import CreateRoomModal from "./CreateRoomModal";
+import { useChatApp } from "@/context/ChatAppContext";
 
 const token = "your_jwt_secret_key";
 const socket2 = io(process.env.API_URL, {
@@ -18,6 +19,7 @@ let socket;
 const SocketConnection = () => {
   const router = useRouter();
   const [connected, setConnected] = useState(false);
+  const { user } = useChatApp();
 
   useEffect(() => {
     socket = socketIo(process.env.API_URL, { transports: ["websocket"] });
@@ -50,6 +52,7 @@ const SocketConnection = () => {
     //   name: "Md. Mainul Hasan",
     // });
     Cookies.remove("token");
+    Cookies.remove("user");
     router.push("/login");
   };
   return (
@@ -63,6 +66,7 @@ const SocketConnection = () => {
         >
           {connected ? "Connected" : "Disconnected"}
         </span> */}
+        <span>{user?.full_name}</span>
       </div>
       <div>
         <button onClick={handleLogout} className="btn btn-danger">

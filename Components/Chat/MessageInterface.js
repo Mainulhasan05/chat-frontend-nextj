@@ -9,13 +9,12 @@ let socket;
 let timer;
 
 const MessageInterface = () => {
-  const { selectedRoomId, handleSetSelectedRoomId, selectedRoom } =
+  const { user, selectedRoomId, handleSetSelectedRoomId, selectedRoom } =
     useChatApp();
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [files, setFiles] = useState(null);
   const [message, setMessage] = useState("");
-  const [user, setUser] = useState();
   const [status, setStatus] = useState("no one");
   const [page, setPage] = useState(1);
   const timeoutRef = useRef(null);
@@ -122,10 +121,10 @@ const MessageInterface = () => {
   const loadMessages = async (limit = 40) => {
     try {
       const res = await axiosInstance.get(
-        `/api/chat/get-messages/${selectedRoomId}?limit=${limit}`
+        `/api/messages/private/${selectedRoom?.user?.id}`
       );
       setMessages(res.data.data.messages);
-      setUser(res.data.data.user);
+
       socket.emit("connection", { id: res.data?.data?.user?.id });
     } catch (error) {
       console.log("Error loading messages:", error);
@@ -152,13 +151,15 @@ const MessageInterface = () => {
         >
           Back
         </span>{" "}
-        {selectedRoom?.name} - - {user?.username}
+        {selectedRoom?.user?.full_name} - - {user?.phone}
       </h4>
       <div className="message-container p-3 d-flex flex-column-reverse">
         {messages?.map((data, index) => (
           <div key={index}>
             <div>
-              <p className={`${user?.id === data?.userId ? "own" : "other"}`}>
+              <p
+                className={`${user?.id === data?.sender_id ? "own" : "other"}`}
+              >
                 {data?.content}
               </p>
               <small

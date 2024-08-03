@@ -20,6 +20,10 @@ export const ChatAppProvider = ({ children }) => {
     const token = Cookies.get("token");
     if (token) {
       fetchRooms();
+      if (Cookies.get("user")) {
+        setUser(JSON.parse(Cookies.get("user")));
+        console.log("User", JSON.parse(Cookies.get("user")));
+      }
     }
   }, []);
 
@@ -29,41 +33,11 @@ export const ChatAppProvider = ({ children }) => {
 
   const fetchRooms = async (token) => {
     try {
-      const res = await axiosInstance.get("/api/auth/chat-rooms");
+      const res = await axiosInstance.get("/api/chats");
       setChatRooms(res.data?.data);
     } catch (error) {
       console.log(error.message);
     }
-  };
-
-  const login = async ({ username, password }) => {
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        setUser(data.user);
-      } else {
-        throw new Error(data.error);
-      }
-    } catch (error) {
-      setMessage({ type: "danger", text: error.message });
-    }
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    setChatRooms([]);
-    setMessages([]);
   };
 
   const createRoom = async ({ name, password }) => {
@@ -109,8 +83,7 @@ export const ChatAppProvider = ({ children }) => {
         selectedRoom,
         setSelectedRoom,
         fetchRooms,
-        login,
-        logout,
+
         createRoom,
         joinRoom,
         handleSetSelectedRoomId,

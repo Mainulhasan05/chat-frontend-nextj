@@ -37,20 +37,22 @@ const UserList = () => {
     <div>
       <hr />
       <div style={{ overflow: "scroll", height: "80vh" }}>
-        {chatRooms.map((data, index) => {
+        {chatRooms?.privateChats?.map((data, index) => {
           return (
             <div key={index} className="chartrooms mx-4">
               <div style={{ cursor: "pointer" }}>
                 <span
                   className={`${
-                    selectedRoomId == data.id ? "active text-success" : ""
+                    selectedRoomId == data?.user?.id
+                      ? "active text-success"
+                      : ""
                   }`}
                   onClick={() => {
-                    handleSetSelectedRoomId(data.id);
+                    handleSetSelectedRoomId(data?.user?.id);
                     setSelectedRoom(data);
                   }}
                 >
-                  <h6>{data.name}</h6>
+                  <h6>{data?.user?.full_name}</h6>
                 </span>
                 <hr />
               </div>

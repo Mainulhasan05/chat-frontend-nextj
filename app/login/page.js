@@ -11,7 +11,7 @@ const page = () => {
   const { fetchRooms } = useChatApp();
   const [loading, setLoading] = useState(false);
   const [userObj, setUserObj] = useState({
-    username: "",
+    phone: "",
     password: "",
   });
 
@@ -22,7 +22,10 @@ const page = () => {
       const res = await axiosInstance.post("/api/auth/login", userObj);
       if (res.status === 200) {
         Cookies.set("token", res.data?.data?.token, {
-          expires: 30,
+          expires: 90,
+        });
+        Cookies.set("user", JSON.stringify(res.data?.data?.user), {
+          expires: 90,
         });
         router.push("/chat");
         setLoading(false);
@@ -52,7 +55,7 @@ const page = () => {
                   <input
                     type="text"
                     className="form-control"
-                    id="username"
+                    id="phone"
                     value={userObj.username}
                     onChange={handleChange}
                     required
